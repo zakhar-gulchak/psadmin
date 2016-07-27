@@ -1,0 +1,26 @@
+# Корневой файл EditorConfig
+root = true
+
+# Для всех файлов используем unix-совместимые переносы строк
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+# отступы в 4 пробела
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Используем табы для отступов (Не указываем размер)
+[*.js]
+indent_style = tab
+
+# Перезависываем настройку отступов для js файлов в папке lib
+[lib/**.js]
+indent_style = space
+indent_size = 2
+
+# Только для файлов package.json or .travis.yml
+[{package.json,.travis.yml}]
+indent_style = space
+indent_size = 2

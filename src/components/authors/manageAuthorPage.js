@@ -3,7 +3,8 @@
 var React = require('react');
 var Router = require('react-router');
 var AuthorForm = require('./authorForm');
-var AuthorApi = require('../../api/authorApi');
+var AuthorActions = require('../../actions/authorActions');
+var AuthorStore = require('../../stores/authorStore');
 var toastr = require('toastr');
 
 var ManageAuthorPage = React.createClass({
@@ -12,6 +13,7 @@ var ManageAuthorPage = React.createClass({
 	],
 
 	statics: {
+		// todo : resolve bug with this prompt message
 		willTransitionFrom: function(transition, component) {
 			if (component.state.dirty && !confirm('Leave without saving?')) {
 				transition.abort();
@@ -31,7 +33,7 @@ var ManageAuthorPage = React.createClass({
 		var authorId = this.props.params.id; // from the path '/author:id'
 
 		if (authorId) {
-			this.setState({author: AuthorApi.getAuthorById(authorId)});
+			this.setState({author: AuthorStore.getAuthorById(authorId)});
 		}
 	},
 
@@ -68,7 +70,12 @@ var ManageAuthorPage = React.createClass({
 			return;
 		}
 
-		AuthorApi.saveAuthor(this.state.author);
+		if (this.state.author.id) {
+			AuthorActions.updateAuthor(this.state.author);
+		} else {
+			AuthorActions.createAuthor(this.state.author);
+		}
+
 		this.setState({dirty: false});
 		toastr.success('Author saved.');
 		this.transitionTo('authors');
